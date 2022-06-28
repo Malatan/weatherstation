@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Weather Station</title>
+
+    <meta name="description" content="Weather Station for PPM Project">
+    <meta name="keywords" content="weather, station, iot, arduino, ppm, unifi, course">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/master.css">
+    <link href="http://fonts.cdnfonts.com/css/georgia" rel="stylesheet">
+    <link href="http://fonts.cdnfonts.com/css/helvetica-neue-9" rel="stylesheet">
+  </head>
+  <body>
+    <header class="header">
+      <div class="toggle-menu">
+        <a href="#">
+          <div class="btn">
+            <span></span>
+          </div>
+        </a>
+        <a href="#">
+          <h1>Menu</h1>
+        </a>
+      </div>
+      <div class="app-title">
+        <h1 id="ws-name">Weather Station of Prato</h1>
+      </div>
+    </header>
+
+    <main>
+      <div class="container sensors-section">
+
+        <!-- Temperature -->
+        <section class="sensor">
+          <header class="sensor-header orange">
+            <h1>Temperature</h1>
+          </header>
+          <div class="sensor-body">
+            <div class="col-m">
+              <div class="round-value">
+                <h1><span id="temperature-temp">27.2</span><span class="unit">°C</span></h1>
+              </div>
+            </div>
+            <div class="col-s">
+              <div class="key-value-container">
+                <div class="key-value">
+                  <h1>Trend</h1>
+                  <p class="red"><span id="temperature-trend">+2</span> °C</p>
+                </div>
+                <div class="key-value">
+                  <h1>perceived</h1>
+                  <p><span id="temperature-perceived">28.9</span> °C</p>
+                </div>
+                <div class="key-value">
+                  <h1>Humidity</h1>
+                  <p><span id="temperature-humidity">64</span> %</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Today -->
+        <section class="sensor">
+          <header class="sensor-header green">
+            <h1>Today</h1>
+          </header>
+          <div class="sensor-body">
+            <div class="col-s">
+              <div class="key-value-container">
+                <div class="key-value">
+                  <h1><span id="today-day-week">Tuesday</span></h1>
+                </div>
+                <div class="key-value">
+                  <h1>Sunrise</h1>
+                  <p><span id="today-sunrise" class="orange">5:34</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-m">
+              <div class="round-value">
+                <h1><span id="today-hour">12</span><span class="unit">h</span>
+                  <span id="today-minut">03</span><span class="unit">m</span></h1>
+              </div>
+            </div>
+            <div class="col-s">
+              <div class="key-value-container">
+                <div class="key-value">
+                  <h1><span id="today-day">June 28 2022</span></h1>
+                </div>
+                <div class="key-value">
+                  <h1>Sunset</h1>
+                  <p><span id="today-sunset" class="blue">21:00</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Past -->
+        <section class="sensor">
+          <header class="sensor-header red">
+            <h1>Past</h1>
+          </header>
+          <div class="sensor-body">
+            <div class="col-s">
+              <div class="slide">
+                <div class="slide-header">
+                  <h1 id="past-day-3-date">25/06</h1>
+                </div>
+                <div class="slide-body">
+                  <div class="img">
+                    <img id="past-day-3-img" src="https://via.placeholder.com/50" alt="">
+                  </div>
+                  <div class="temp">
+                    <h1><span class="red" id="past-day-3-max">34</span>
+                      <span class="vbar"></span>
+                      <span class="blue" id="past-day-3-min">23</span></h1>
+                  </div>
+                  <div class="rainfall">
+                    <h1 class="blue"><span id="past-day-3-rainfall">0</span>% Rainfall</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-s">
+              <div class="slide">
+                <div class="slide-header">
+                  <h1 id="past-day-2-date">25/06</h1>
+                </div>
+                <div class="slide-body">
+                  <div class="img">
+                    <img id="past-day-2-img" src="https://via.placeholder.com/50" alt="">
+                  </div>
+                  <div class="temp">
+                    <h1><span class="red" id="past-day-2-max">34</span>
+                      <span class="vbar"></span>
+                      <span class="blue" id="past-day-2-min">23</span></h1>
+                  </div>
+                  <div class="rainfall">
+                    <h1 class="blue"><span id="past-day-2-rainfall">0</span>% Rainfall</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-s">
+              <div class="slide">
+                <div class="slide-header">
+                  <h1 id="past-day-1-date">25/06</h1>
+                </div>
+                <div class="slide-body">
+                  <div class="img">
+                    <img id="past-day-1-img" src="https://via.placeholder.com/50" alt="">
+                  </div>
+                  <div class="temp">
+                    <h1><span class="red" id="past-day-1-max">34</span>
+                      <span class="vbar"></span>
+                      <span class="blue" id="past-day-1-min">23</span></h1>
+                  </div>
+                  <div class="rainfall">
+                    <h1 class="blue"><span id="past-day-1-rainfall">0</span>% Rainfall</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Rain -->
+        <section class="sensor">
+          <header class="sensor-header blue">
+            <h1>Rain</h1>
+          </header>
+          <div class="sensor-body">
+            <div class="col-m">
+              <div id="rain-beker" class="square-value">
+                <h1><span id="rain-val">7</span><span class="unit">mm</span></h1>
+              </div>
+            </div>
+            <div class="col-s">
+              <div class="round-value small">
+                <h2 id="rain-month">July</h2>
+                <h1 class="blue"><span id="rain-month-val">15</span> mm</h1>
+              </div>
+
+              <div class="round-value small">
+                <h2 id="rain-year">2022</h2>
+                <h1 class="blue"><span id="rain-year-val">562</span> mm</h1>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Moon -->
+        <section class="sensor">
+          <header class="sensor-header yellow">
+            <h1>Moon</h1>
+          </header>
+          <div class="sensor-body">
+            <div class="col-s">
+              <div class="key-value-container">
+                <div class="key-value">
+                  <h1>Full Moon</h1>
+                  <p><span id="moon-full-moon" class="blue">13/07/2022</span></p>
+                </div>
+                <div class="key-value">
+                  <h1>Moon Sunrise</h1>
+                  <p><span id="moon-sunrise" class="orange">4:38</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-m">
+              <div class="round-value">
+                <h2 id="moon-phase" class="orange">Falling</h2>
+                <h1><span id="moon-percentage">30</span><span class="unit">%</span></h1>
+              </div>
+            </div>
+            <div class="col-s">
+              <div class="key-value-container">
+                <div class="key-value">
+                  <h1>New Moon</h1>
+                  <p><span id="moon-new-moon" class="orange">29/06/2022</span></p>
+                </div>
+                <div class="key-value">
+                  <h1>Moon Sunset</h1>
+                  <p><span id="moon-sunset" class="blue">20:59</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pressure -->
+        <section class="sensor">
+          <header class="sensor-header purple">
+            <h1>Pressure</h1>
+          </header>
+          <div class="sensor-body">
+            <div class="col-l">
+              <div class="round-bar">
+                <h1><span id="pressure-val">995</span><span class="unit">hPa</span></h1>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer>
+
+    </footer>
+
+  </body>
+</html>
