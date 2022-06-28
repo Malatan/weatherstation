@@ -226,6 +226,13 @@ a {
   top: 42px;
 }
 
+.round-value h2 img {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  top: -5px;
+}
+
 .round-value.small {
   width: 80px;
   height: 80px;
@@ -342,6 +349,11 @@ a {
   left: 2px;
 }
 
+.square-value img {
+  width: 36px;
+  height: 36px;
+}
+
 /* round bar */
 
 .round-bar {
@@ -374,6 +386,11 @@ a {
   text-align: center;
   position: absolute;
   top: 42px;
+}
+
+.round-bar h2 img {
+  width: 48px;
+  height: 48px;
 }
 
 .round-bar.small {
