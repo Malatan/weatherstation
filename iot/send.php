@@ -3,30 +3,60 @@
 	require_once("secret.php");
 
 	$data = $_POST['data'];
-	if (!isset($data))
-		return json_encode(array('result' => '400'));
+	if (!isset($data)) {
+		http_response_code(400);		//TODO check if correct
+		return;
+	}
+	http_response_code(200);
 
 	$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
-	$mysqli->begin_transaction();
 
 	$sensor_list = $data['sensor_list'];
 	$timestamp = $data['timestamp'];
 	$ws_id = $data['weatherstation_id'];
 
-	foreach ($sensor_list as $sensor => $sensor_val) {		//TODO
-		$query = "INSERT INTO Temperature VALUES (?,?,?)";
+	$response = array();
 
-		try {
-			$stmt = $mysqli->prepare($query);
-	    $stmt->bind_param('idi', $ws_id, $sensor_val['value'], $timestamp);
-	    $stmt->execute();
-		} catch (mysqli_sql_exception $exception) {
-		    $mysqli->rollback();
-				return json_encode(array('result' => '500'));
-		}
+	foreach ($sensor_list as $sensor => $sensor_val) {
+		$func = "createStmt".$sensor_val['name'];
+		$stmt = call_user_func($func, $ws_id, $sensor_val['value'], $timestamp);
+
+		$r = $stmt->execute();
+
+		$response[$sensor_val['name']] = ($r) ? '201' : '500';
 	}
-	$mysqli->commit();
 
-	return json_encode(array('result' => '201'));
+	return json_encode($response);
+
+
+	// Functions
+
+	function createStmtTemperature($ws_id, $val, $ts) {
+		$query = 'INSERT INTO Temperature(ws_id, value, ts) VALUES (?,?,?)';
+		$stmt = $mysqli->prepare($query);
+	  $stmt->bind_param('idi', $ws_id, $val, $ts);
+	  return $stmt;
+	}
+
+	function createStmtHumidity($ws_id, $val, $ts) {
+		$query = 'INSERT INTO Humidity(ws_id, value, ts) VALUES (?,?,?)';
+		$stmt = $mysqli->prepare($query);
+	  $stmt->bind_param('iii', $ws_id, $val, $ts);
+	  return $stmt;
+	}
+
+	function createStmtPressure($ws_id, $val, $ts) {
+		$query = 'INSERT INTO Pressure(ws_id, value, ts) VALUES (?,?,?)';
+		$stmt = $mysqli->prepare($query);
+	  $stmt->bind_param('iii', $ws_id, $val, $ts);
+	  return $stmt;
+	}
+
+	function createStmtRain($ws_id, $val, $ts) {
+		$query = 'INSERT INTO Rain(ws_id, value, ts) VALUES (?,?,?)';
+		$stmt = $mysqli->prepare($query);
+	  $stmt->bind_param('iii', $ws_id, $val, $ts);
+	  return $stmt;
+	}
 
 ?>
