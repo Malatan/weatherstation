@@ -2,11 +2,11 @@
 	header('Content-Type: text/json');
 	require_once("secret.php");
 
-	$data = $_POST['data'];
-	if (!isset($data)) {
-		http_response_code(400);		//TODO check if correct
-		return;
+	if (!isset($_POST['data'])) {
+		http_response_code(400);
+		exit(1);
 	}
+	$data = $_POST['data'];
 	http_response_code(200);
 
 	$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
@@ -26,7 +26,7 @@
 		$response[$sensor_val['name']] = ($r) ? '201' : '500';
 	}
 
-	return json_encode($response);
+	echo json_encode($response);
 
 
 	// Functions
