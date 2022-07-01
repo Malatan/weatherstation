@@ -1,4 +1,5 @@
-$(document).ready(function(){
+
+function bindToggleMenu(){
   $(".toggle-menu").on("click", function() {
 
     if ($('main').css('display') == 'none') {
@@ -9,6 +10,6 @@ $(document).ready(function(){
       $("main").hide();
     }
     return false;
-    
+
   });
-});
+}
