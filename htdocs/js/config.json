@@ -1,0 +1,7 @@
+const config = {
+  URL_SERVER : 'http://localhost/weatherstation/iot/',
+  timers : {
+    clock : 1000,
+    sunInfo : 3600000
+  }
+}

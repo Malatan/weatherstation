@@ -1,7 +1,9 @@
-const URL_SERVER = 'http://localhost/weatherstation/iot/';
-
 $(document).ready(function() {
   bindToggleMenu();
-  bindClock();
-  bindSunInfo();
+
+  updateClock();
+  setInterval(updateClock, config.timers.clock);
+
+  updateSunInfo();
+  setInterval(updateSunInfo, config.timers.sunInfo);
 });

@@ -1,10 +1,6 @@
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var days_of_week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-function bindClock() {
-  setInterval(updateClock, 1000);
-}
-
 function updateClock() {
   const date = new Date();
 
