@@ -1,4 +1,4 @@
-<?php 
+<?php
 header('Content-Type: text/json');
 require_once("secret.php");
 echo "Hi this is send.php \n";
@@ -6,7 +6,7 @@ echo "Hi this is send.php \n";
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 	$json = file_get_contents('php://input');
 	$data = json_decode($json);
-	
+
 	if ($data->Api_key == API_KEY){
 		echo "Api key match ";
 		$timestamp = date("Y-m-d H:i:s", time());
@@ -24,7 +24,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		echo "Pioggia ricevuta: " . $pioggia . "\n";
 		echo "Stazione: " . $id_stazione . "\n";*/
 		echo "Data: " . $timestamp . "\n";
-		
+
 		$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
 		if (!$mysqli) {
 			die("SQL CONNECTION FAILED: " . mysqli_connect_error());
@@ -34,22 +34,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$r = $stmt->execute();
 		$stmt->close();
 		echo ($r) ? 'Temperatura(' . $temperatura . ') inserito' . "\n" : 'Temperatura X' . "\n";
-		
+
 		$stmt = createStmtHumidity($mysqli, $id_stazione, $umidita, $timestamp);
 		$r = $stmt->execute();
 		$stmt->close();
 		echo ($r) ? 'Umidita(' . $umidita . ') inserito' . "\n" : 'Umidita X' . "\n";
-		
+
 		$stmt = createStmtPressure($mysqli, $id_stazione, $pressione, $timestamp);
 		$r = $stmt->execute();
 		$stmt->close();
 		echo ($r) ? 'Pressione(' . $pressione . ') inserito' . "\n" : 'Pressione X' . "\n";
-		
+
 		$stmt = createStmtLight($mysqli, $id_stazione, $luce, $timestamp);
 		$r = $stmt->execute();
 		$stmt->close();
 		echo ($r) ? 'Luce(' . $luce . ') inserito' . "\n" : 'Luce X' . "\n";
-		
+
 		$stmt = createStmtRain($mysqli, $id_stazione, $pioggia, $timestamp);
 		$r = $stmt->execute();
 		$stmt->close();

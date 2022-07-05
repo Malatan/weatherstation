@@ -1,6 +1,10 @@
 <?php
 	header('Content-Type: text/json');
+
 	require_once("secret.php");
+
+	include ('include/MoonPhase.php');
+	use Solaris\MoonPhase;
 
   if (isset($_GET['a'])) {
 		$action = $_GET['a'];
@@ -29,21 +33,29 @@
   }
 
 	function getMoonInfo() {
-		if (isset($_GET['day'])) {
-			$day = $_GET['day'];
+		if (isset($_GET['datetime'])) {
+			$dt = $_GET['datetime'];
+			$dt = new DateTime($dt);
+			$moon = new MoonPhase($dt);
 		} else {
-			$day = date("Y-m-d");
+			$moon = new MoonPhase();
 		}
 
-		//TODO query
+		$fullMoon = $moon->getPhaseFullMoon();
+		if (time() > $fullMoon)
+			$fullMoon = $moon->getPhaseNextFullMoon();
+
+		$newMoon = $moon->getPhaseNewMoon();
+		if (time() > $newMoon)
+			$newMoon = $moon->getPhaseNextNewMoon();
 
 		$res = array(
-			'percentage' => 35,
-			'phase' => 'gibbosa',
-			'full' => '05/07',
-			'new' => '16/07',
-			'sunrise' => '5:30',
-			'sunless' => '22:03'
+			'phase' => (int)($moon->getPhase() * 100),
+			'name' => ($moon->getPhaseName()),
+			'nextFull' => date('d-m', $fullMoon),
+			'nextNew' => date('d-m', $newMoon),
+			'age' => (int)($moon->getAge()),
+			'illumination' => (int)($moon->getIllumination() * 100)
 		);
 
 		echo json_encode($res);
@@ -100,7 +112,8 @@
 		//TODO query
 
 		$res = array(
-			'pressure' => 99
+			'pressure' => 99,
+			'percentage' => (99 - 80) * 10/7
 		);
 
 		echo json_encode($res);
