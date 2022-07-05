@@ -9,7 +9,12 @@
   if (isset($_GET['a'])) {
 		$action = $_GET['a'];
     http_response_code(200);
-		call_user_func($action);
+
+		if (is_callable($action))
+			call_user_func($action);
+		else
+			http_response_code(400);
+
   } else
   	http_response_code(400);
 
@@ -61,7 +66,33 @@
 		echo json_encode($res);
 	}
 
-	//TODO past panel
+	function getPastInfo() {
+		$r = array(
+			array(
+				'day' => '04/07',
+				'weather' => 'sun',
+				't_max' => 35,
+				't_min' => 23,
+				'rainfall' => 0
+			),
+			array(
+				'day' => '03/07',
+				'weather' => 'partlyCloudy',
+				't_max' => 32,
+				't_min' => 21,
+				'rainfall' => 4
+			),
+			array(
+				'day' => '02/07',
+				'weather' => 'lightRain',
+				't_max' => 30,
+				't_min' => 20,
+				'rainfall' => 6
+			)
+		);
+
+		echo json_encode($r);
+	}
 
 	// sensor info
 
