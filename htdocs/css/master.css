@@ -268,6 +268,34 @@ a {
   top: 1.13rem;
 }
 
+/* extension of round value */
+
+.moon {
+  background-color: #F5F3CE;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.moon .moon-shadow {
+  width: 11rem;
+  height: 11rem;
+  border-radius: 100%;
+  background-color: #000;
+  opacity: 0.9;
+  position: relative;
+  top: -11rem;
+  left: -0.5rem;
+  z-index: -1;
+  transition: left 1s linear;
+}
+
+.moon h1 {
+  text-shadow: 1px 0px 3px #000;
+}
+
+.moon h2 {
+  text-shadow: 1px 1px 1px #000;
+}
 
 /* key value */
 
@@ -347,11 +375,6 @@ height: 90%;
   margin: auto;
   position: relative;
   top: 5rem;
-
-  background-image: linear-gradient(#a8c6fa, #a8c6fa);
-  background-size: 100% 11%;
-  background-repeat: no-repeat;
-  background-position: bottom;
 }
 
 .square-value h1 {
@@ -373,6 +396,16 @@ height: 90%;
   max-height: 48px;
 }
 
+/* extension of square value */
+
+.beker {
+  background-image: linear-gradient(#a8c6fa, #a8c6fa);
+  background-size: 100% 50%;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  transition: background-size 1s linear;
+}
+
 /* round bar */
 
 .round-bar {
@@ -384,7 +417,18 @@ height: 90%;
   margin: auto;
   position: relative;
   top: 10%;
-  background-color: rgba(0,0,0,0);
+  background: conic-gradient(from 90deg, #ff8a84 180deg, #606060 0deg);
+  transition: 1s linear;
+}
+
+.round-bar-fill {
+  width: 14rem;
+  height: 14rem;
+  border-radius: 100%;
+  margin: auto;
+  background-color: #606060;
+  position: relative;
+  top: 0.5rem;
 }
 
 .round-bar h1 {

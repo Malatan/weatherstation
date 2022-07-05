@@ -1,7 +1,30 @@
 const config = {
-  URL_SERVER : 'http://localhost/weatherstation/iot/',
+  URL_SERVER : 'http://localhost/',
+  QUERY_FILE : 'iot/query.php',
+  IMGS_PATH : 'img/',
+
   timers : {
     clock : 1000,
-    sunInfo : 3600000
+    sunInfo : 3600000,
+    pastInfo : 3600000,
+    temperatureInfo : 60000,
+    rainInfo : 60000,
+    pressureInfo : 60000,
+    moonInfo : 3600000
+  },
+
+  imgs : {
+    sun : 'sole.png',
+    partlyCloudy : 'parzialmente-nuvoloso.png',
+    lightRain : 'pioggia-leggera.png',
+    rain : 'pioggia.png',
+    thunderstorm : 'pioggia-temporale.png',
+    snow : 'neve.png',
+    rainy : 'piovoso.png',
+    dry : 'asciutto.png',
+    wet : 'bagnato.png',
+    baromether : 'barometro.png',
+    thermometerUp : 'termometro-su.png',
+    thermometerDown : 'termometro-giu.png'
   }
 }
