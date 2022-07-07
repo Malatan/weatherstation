@@ -14,7 +14,9 @@ const config = {
   },
 
   imgs : {
+    moon : 'luna.png',
     sun : 'sole.png',
+    cloudly : 'nuvoloso.png',
     partlyCloudy : 'parzialmente-nuvoloso.png',
     lightRain : 'pioggia-leggera.png',
     rain : 'pioggia.png',
