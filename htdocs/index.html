@@ -14,8 +14,10 @@
     <link href="http://fonts.cdnfonts.com/css/helvetica-neue-9" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="js/config.json" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+    <script src="js/config.js" charset="utf-8"></script>
     <script src="js/sensors.js" charset="utf-8"></script>
+    <script src="js/sensor-charts.js" charset="utf-8"></script>
     <script src="js/menu.js" charset="utf-8"></script>
     <script src="js/clock.js" charset="utf-8"></script>
     <script src="js/init.js" charset="utf-8"></script>
@@ -46,9 +48,10 @@
       <div class="container sensors-section">
 
         <!-- Temperature -->
-        <section class="sensor">
+        <section id="temperature-panel" class="sensor">
           <header class="sensor-header orange">
             <h1>Temperature</h1>
+            <a href="#"><span class="enlarge-btn">&#10697;</span></a>
           </header>
           <div class="sensor-body">
             <div class="col-m">
@@ -74,10 +77,13 @@
               </div>
             </div>
           </div>
+          <div class="sensor-details hide-details">
+            <canvas id="temperature-canvas"></canvas>
+          </div>
         </section>
 
         <!-- Today -->
-        <section class="sensor">
+        <section id="today-panel" class="sensor">
           <header class="sensor-header green">
             <h1>Today</h1>
           </header>
@@ -115,7 +121,7 @@
         </section>
 
         <!-- Past -->
-        <section class="sensor">
+        <section id="past-panel" class="sensor">
           <header class="sensor-header red">
             <h1>Past</h1>
           </header>
@@ -184,9 +190,10 @@
         </section>
 
         <!-- Rain -->
-        <section class="sensor">
+        <section id="rain-panel" class="sensor">
           <header class="sensor-header blue">
             <h1>Rain</h1>
+            <a href="#"><span class="enlarge-btn">&#10697;</span></a>
           </header>
           <div class="sensor-body">
             <div class="col-m">
@@ -207,10 +214,13 @@
               </div>
             </div>
           </div>
+          <div class="sensor-details hide-details">
+            <canvas id="rain-canvas"></canvas>
+          </div>
         </section>
 
         <!-- Moon -->
-        <section class="sensor">
+        <section id="moon-panel" class="sensor">
           <header class="sensor-header yellow">
             <h1>Moon</h1>
           </header>
@@ -251,9 +261,10 @@
         </section>
 
         <!-- Pressure -->
-        <section class="sensor">
+        <section id="pressure-panel" class="sensor">
           <header class="sensor-header purple">
             <h1>Pressure</h1>
+            <a href="#"><span class="enlarge-btn">&#10697;</span></a>
           </header>
           <div class="sensor-body">
             <div class="col-l">
@@ -264,6 +275,9 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="sensor-details hide-details">
+            <canvas id="pressure-canvas"></canvas>
           </div>
         </section>
 

@@ -24,4 +24,7 @@ $(document).ready(function() {
 
   updateMoonInfo();
   setInterval(updateMoonInfo, config.timers.moonInfo);
+
+  // sensor-charts.js
+  bindDetailsBtn();
 });
