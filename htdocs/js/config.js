@@ -32,19 +32,30 @@ const config = {
   }
 }
 
-//{d:'2016-12-25', t:20, h:54}, {d:'2016-12-26', t:10, h:48}, {d:'2016-12-27', t:20, h:50}, {d:'2016-12-28', t:10, h:49}
-//{d:'2016-12-25', r:20}, {d:'2016-12-25', r:20}, {d:'2016-12-25', r:20}
+const chartLabel = {
+  color: '#fff',
+  font : {
+    family: '"Georgia", "Times", "Times New Roman", serif',
+    size : 14,
+    weight : 100
+  }
+}
 
-const chartLegendOptions = {
-    display: true,
-    labels: {
-        color: '#fff',
-        font : {
-          family: "'Helvetica Neue', sans-serif",
-          size : 14,
-          weight : 100
-        }
+const chartOptions = {
+  plugins : {
+    legend : {
+        display: true,
+        labels: $.extend(true, {}, chartLabel)
     }
+  },
+  scales : {
+    x : {
+      ticks : $.extend(true, {}, chartLabel)
+    },
+    y : {
+      ticks : $.extend(true, {}, chartLabel)
+    }
+  }
 }
 
 const chartCfg = {
@@ -70,15 +81,12 @@ const chartCfg = {
           }
         }]
       },
-      options: {
+      options : $.extend(true, {}, chartOptions, {
         interaction: {
           intersect: false,
           mode: 'index',
-        },
-        plugins: {
-            legend: chartLegendOptions
         }
-      }
+      })
     },
 
     rain : {
@@ -95,11 +103,7 @@ const chartCfg = {
           }
         }]
       },
-      options : {
-        plugins: {
-            legend: chartLegendOptions
-        }
-      }
+      options : $.extend(true, {}, chartOptions)
     },
 
     pressure : {
@@ -115,10 +119,6 @@ const chartCfg = {
           }
         }]
       },
-      options : {
-        plugins : {
-          legend : chartLegendOptions
-        }
-      }
+      options : $.extend(true, {}, chartOptions)
     }
   };
