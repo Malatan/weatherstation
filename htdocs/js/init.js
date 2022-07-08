@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+  updateTimeLabel();
+  setInterval(updateTimeLabel, config.timers.updateTime);
+
   // menu.js
   bindToggleMenu();
 
@@ -25,6 +29,5 @@ $(document).ready(function() {
   updateMoonInfo();
   setInterval(updateMoonInfo, config.timers.moonInfo);
 
-  // sensor-charts.js
   bindDetailsBtn();
 });

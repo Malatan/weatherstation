@@ -45,6 +45,11 @@ a {
   background-color: #606060;
 }
 
+.update-label {
+  text-align:center;
+  margin-bottom: 10px;
+}
+
 /* toggle menu */
 
 .toggle-menu {

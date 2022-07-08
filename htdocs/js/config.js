@@ -6,6 +6,7 @@ const config = {
 
   timers : {
     clock : 1000,
+    updateTime : 60000,
     sunInfo : 3600000,
     pastInfo : 3600000,
     temperatureInfo : 60000,
@@ -15,6 +16,7 @@ const config = {
   },
 
   imgs : {
+    nodata: 'no-data.png',
     moon : 'luna.png',
     sun : 'sole.png',
     cloudly : 'nuvoloso.png',
