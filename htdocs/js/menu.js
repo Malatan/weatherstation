@@ -67,6 +67,7 @@ function selezionaStazione(val){
                         }*/
                         //ricarica i dati relativi alla stazione scelta
                         updateTimeLabel();
+						updateLightLevel();
                         updatePastInfo();
                         updateTemperatureInfo();
                         updateRainInfo();
