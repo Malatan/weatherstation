@@ -1,2 +1,2 @@
-1_db_last_update=2022-07-08 14:36:22
-2_db_last_update=
+1_db_last_update=2022-07-10 15:09:30
+2_db_last_update=2022-07-10 15:02:15

@@ -47,6 +47,52 @@ CREATE TABLE pioggia(
 	PRIMARY KEY (id_stazione, data)
 );
 
+CREATE VIEW pioggia_mensile_1 AS 
+	SELECT id_stazione, DATE_FORMAT(data, "%Y-%m") as mese, AVG(valore) as media  
+	FROM pioggia 
+	WHERE id_stazione = 1 
+	GROUP BY MONTH(data), YEAR(data);
+
+CREATE VIEW pioggia_mensile_2 AS 
+	SELECT id_stazione, DATE_FORMAT(data, "%Y-%m") as mese, AVG(valore) as media  
+	FROM pioggia 
+	WHERE id_stazione = 2 
+	GROUP BY MONTH(data), YEAR(data);
+	
+CREATE VIEW pioggia_annuale_1 AS 
+	SELECT id_stazione, YEAR(data) as anno, AVG(valore) as media 
+	FROM pioggia 
+	WHERE id_stazione = 1 
+	GROUP BY YEAR(data);
+	
+CREATE VIEW pioggia_annuale_2 AS 
+	SELECT id_stazione, YEAR(data) as anno, AVG(valore) as media 
+	FROM pioggia 
+	WHERE id_stazione = 2 
+	GROUP BY YEAR(data);
+	
 INSERT INTO stazione (id, descrizione)
 VALUES(1, "Zheng"), 
 (2, "Sassoli");
+
+DELIMITER $$
+CREATE TRIGGER appello_date_change 
+AFTER UPDATE ON appello FOR EACH ROW
+BEGIN
+IF NEW.data <> OLD.data THEN 
+	BEGIN
+	DELETE FROM prenotazione_aula_giorno WHERE id_appello = NEW.id_appello;
+	END;
+END IF;
+END;
+$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER ritira_domanda 
+AFTER DELETE ON domandatesi FOR EACH ROW
+BEGIN
+	DELETE FROM appello_membro WHERE appello_membro.matricola = old.matricola OR appello_membro.matricola = old.relatore;
+END;
+$$
+DELIMITER ;

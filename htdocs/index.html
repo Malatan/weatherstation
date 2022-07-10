@@ -42,6 +42,9 @@
           <h1>&#9888;</h1>
         </a>
       </div>
+      <div class="loading-box" id="loading-top">
+        <img src="img/loading.gif" alt="loading" width="80" />
+      </div>
       <div class="update-label">
         <p id="updatetime-label">update time label</p>
       </div>
@@ -80,7 +83,7 @@
               </div>
             </div>
           </div>
-          <div class="sensor-details hide-details">
+          <div class="temperature-graph sensor-details hide-details">
             <canvas id="temperature-canvas"></canvas>
           </div>
         </section>
@@ -104,7 +107,7 @@
             </div>
             <div class="col-m">
               <div class="round-value">
-                <h2><img src="img/sole.png" alt=""></h2>
+                <h2><img id="light-level-img" src="img/sole.png" alt=""></h2>
                 <h1><span id="today-hour">--</span><span class="unit">h</span>
                   <span id="today-minute">--</span><span class="unit">m</span></h1>
               </div>
@@ -201,23 +204,23 @@
           <div class="sensor-body">
             <div class="col-m">
               <div id="rain-beker" class="square-value beker">
-                <h1><span id="rain-val">-</span><span class="unit">mm</span></h1>
+                <h1><span id="rain-val">-</span><span class="unit">%</span></h1>
                 <img src="img/piovoso.png" alt="">
               </div>
             </div>
             <div class="col-s">
               <div class="round-value small">
                 <h2 id="rain-month">-</h2>
-                <h1 class="blue"><span id="rain-month-val">--</span> mm</h1>
+                <h1 class="blue"><span id="rain-month-val">--</span> %</h1>
               </div>
 
               <div class="round-value small">
                 <h2 id="rain-year">-</h2>
-                <h1 class="blue"><span id="rain-year-val">--</span> mm</h1>
+                <h1 class="blue"><span id="rain-year-val">--</span> %</h1>
               </div>
             </div>
           </div>
-          <div class="sensor-details hide-details">
+          <div class="rain-graph sensor-details hide-details">
             <canvas id="rain-canvas"></canvas>
           </div>
         </section>
@@ -279,7 +282,7 @@
               </div>
             </div>
           </div>
-          <div class="sensor-details hide-details">
+          <div class="pressure-graph sensor-details hide-details">
             <canvas id="pressure-canvas"></canvas>
           </div>
         </section>
@@ -292,8 +295,8 @@
         <h1 class="item">Choose the weather station</h1>
         <div class="item">
           <ul>
-            <li><a href="#">Prato</a></li>
-            <li><a href="#">Calenzano</a></li>
+            <li><a href="#" onclick="selezionaStazione('Prato')">Prato</a></li>
+            <li><a href="#" onclick="selezionaStazione('Calenzano')">Calenzano</a></li>
           </ul>
         </div>
       </div>

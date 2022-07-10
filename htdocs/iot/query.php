@@ -5,9 +5,11 @@ include('include/MoonPhase.php');
 date_default_timezone_set('Europe/Rome');
 define('DEF_PIOGGIA',4095);
 use Solaris\MoonPhase;
+$id_stazione = 1;
 
 if (isset($_GET['a'])) {
     $action = $_GET['a'];
+    $id_stazione = $_GET['id'];
     http_response_code(200);
     call_user_func($action);
 } else
@@ -64,6 +66,7 @@ function getMoonInfo(){
 // sensor info
 
 function getPastInfo() {
+        global $id_stazione;
         //genera le date di 3 giorni passati
         $date = date('Y-m-d');
         $days = [date('Y-m-d', strtotime($date . " -1 day")),
@@ -101,7 +104,8 @@ function getPastInfo() {
         
         for ($i = 0; $i < 3; $i++) {
                 //fetch max tempeatura
-                $query = "SELECT * FROM temperatura WHERE DATE(data) = '" . $days[$i] . "' AND id_stazione = 1 ORDER BY valore DESC LIMIT 1";                 
+                $query = "SELECT * FROM temperatura WHERE DATE(data) = '" . $days[$i] . "' 
+                        AND id_stazione = " . $id_stazione . " ORDER BY valore DESC LIMIT 1";                 
                 if ($result = $mysqli->query($query)) {
                     if ($row = $result->fetch_array(MYSQLI_ASSOC)){
                             if ($row['valore'] != 0){
@@ -112,7 +116,8 @@ function getPastInfo() {
                 }
                 
                 //fetch min tempeatura
-                $query = "SELECT * FROM temperatura WHERE DATE(data) = '" . $days[$i] . "' AND id_stazione = 1 ORDER BY valore ASC LIMIT 1";                 
+                $query = "SELECT * FROM temperatura WHERE DATE(data) = '" . $days[$i] . "' 
+                        AND id_stazione = " . $id_stazione . " ORDER BY valore ASC LIMIT 1";                 
                 if ($result = $mysqli->query($query)) {
                     if ($row = $result->fetch_array(MYSQLI_ASSOC)){
                             if ($row['valore'] != 0){
@@ -123,7 +128,8 @@ function getPastInfo() {
                 }
                 
                 //fetch pioggia
-                $query = "SELECT id_stazione, AVG(valore) as media FROM pioggia WHERE DATE(data) = '" . $days[$i] . "' AND id_stazione = 1";                 
+                $query = "SELECT id_stazione, AVG(valore) as media FROM pioggia 
+                        WHERE DATE(data) = '" . $days[$i] . "' AND id_stazione = " . $id_stazione;                 
                 if ($result = $mysqli->query($query)) {
                     if ($row = $result->fetch_array(MYSQLI_ASSOC)){
                             if ($row['media'] != 0) {
@@ -138,8 +144,8 @@ function getPastInfo() {
                 //weather
                 //fetch light
                 $light = 4095;
-                $query = "SELECT id_stazione, AVG(valore) as media FROM luce 
-                        WHERE DATE(data) = '" . $days[$i] . "' AND TIME(data) >= '09:00:00' AND TIME(data) <= '16:00:00' AND id_stazione = 1";                 
+                $query = "SELECT id_stazione, AVG(valore) as media FROM luce WHERE DATE(data) = '" . $days[$i] . "' 
+                AND TIME(data) >= '09:00:00' AND TIME(data) <= '16:00:00' AND id_stazione = " . $id_stazione;                 
                 if ($result = $mysqli->query($query)) {
                     if ($row = $result->fetch_array(MYSQLI_ASSOC)){
                             if ($row['media'] != 0) {
@@ -148,9 +154,9 @@ function getPastInfo() {
                     } 
                     $result->free_result();
                 }
-                if ($light <= 2000){
+                if ($light <= 800){
                         $r[$i]['weather'] = 'cloudly';
-                } else if($light <= 2400){
+                } else if($light <= 1200){
                         $r[$i]['weather'] = 'partlyCloudy';
                 } else {
                         $r[$i]['weather'] = 'sun';
@@ -163,12 +169,17 @@ function getPastInfo() {
                 } else if( $r[$i]['rainfall'] >= 15){
                         $r[$i]['weather'] = 'lightRain';
                 }
+                if ( $r[$i]['rainfall'] == 999){
+                        $r[$i]['weather'] = 'nodata';
+                }
         }
         
 	echo json_encode($r);
 }
 
 function getTemperatureInfo(){
+    global $id_stazione;
+    
     $res = array(
         'temperature' => 0.0,
         'trend' => 0.0,
@@ -185,8 +196,7 @@ function getTemperatureInfo(){
     //get temperatura
     $query = "SELECT * FROM temperatura 
                     WHERE DATE(DATE_ADD(NOW(), INTERVAL 2 HOUR)) = DATE(data) 
-                    AND id_stazione = 1 
-                    ORDER BY data DESC LIMIT 1";
+                    AND id_stazione = " . $id_stazione . " ORDER BY data DESC LIMIT 1";
     if ($result = $mysqli->query($query)) {
             if ($row = $result->fetch_array(MYSQLI_ASSOC)){
                     $res['temperature'] = $row['valore'];
@@ -199,8 +209,7 @@ function getTemperatureInfo(){
     //get umidita
     $query = "SELECT * FROM umidita 
                     WHERE DATE(DATE_ADD(NOW(), INTERVAL 2 HOUR)) = DATE(data) 
-                    AND id_stazione = 1 
-                    ORDER BY data DESC LIMIT 1";
+                    AND id_stazione = " . $id_stazione . " ORDER BY data DESC LIMIT 1";
     if ($result = $mysqli->query($query)) {
         if ($row = $result->fetch_array(MYSQLI_ASSOC)){
             $res['humidity'] = $row['valore'];
@@ -219,9 +228,8 @@ function getTemperatureInfo(){
     
     
     //get temperatura media ieri
-    $query = "SELECT id_stazione, AVG(valore) as media 
-				FROM temperatura 
-				WHERE DATE(DATE_SUB(NOW(), INTERVAL 1 DAY)) = DATE(data)";
+    $query = "SELECT id_stazione, AVG(valore) as media FROM temperatura 
+	WHERE DATE(DATE_SUB(NOW(), INTERVAL 1 DAY)) = DATE(data) AND id_stazione = " . $id_stazione;
     if ($result = $mysqli->query($query)) {
         $row = $result->fetch_array(MYSQLI_ASSOC);
         if ($row['media'] != 0) {
@@ -235,6 +243,7 @@ function getTemperatureInfo(){
 }
 
 function getRainInfo(){  
+    global $id_stazione;
     $res = array(
         'rain' => 0.0,
         'month' => 0.0,
@@ -246,10 +255,8 @@ function getRainInfo(){
         die("SQL CONNECTION FAILED: " . mysqli_connect_error());
     }
 	//get pioggia giornaliera
-    $query = "SELECT id_stazione, AVG(valore) as media 
-                FROM pioggia 
-                WHERE DATE(DATE_ADD(NOW(), INTERVAL 2 HOUR)) = DATE(data)
-                AND id_stazione = 1";
+    $query = "SELECT id_stazione, AVG(valore) as media FROM pioggia WHERE DATE(DATE_ADD(NOW(), INTERVAL 2 HOUR)) = DATE(data)
+                AND id_stazione = " . $id_stazione;
     if ($result = $mysqli->query($query)) {
         if ($row = $result->fetch_array(MYSQLI_ASSOC)){
                 if ($row['media'] != 0) {
@@ -260,14 +267,33 @@ function getRainInfo(){
         }
         $result->free_result();
     }
-            //get pioggia mensile
-            //get pioggia annuale
-	
+    $date = date('Y-m');
+    //get pioggia mensile
+    $query = "SELECT * FROM pioggia_mensile_" . $id_stazione . " WHERE mese = '" . $date . "'";
+    if ($result = $mysqli->query($query)) {
+        if ($row = $result->fetch_array(MYSQLI_ASSOC)){
+                $rain_percentage = ((DEF_PIOGGIA - round($row['media'])) / DEF_PIOGGIA) * 100;
+                $res['month']     = round($rain_percentage);
+        }
+        $result->free_result();
+    }
+    $date = date('Y');
+    //get pioggia annuale
+    $query = "SELECT * FROM pioggia_annuale_" . $id_stazione . " WHERE anno = '" . $date . "'";
+    if ($result = $mysqli->query($query)) {
+        if ($row = $result->fetch_array(MYSQLI_ASSOC)){
+                $rain_percentage = ((DEF_PIOGGIA - round($row['media'])) / DEF_PIOGGIA) * 100;
+                $res['year']     = round($rain_percentage);
+        }
+        $result->free_result();
+    }
+    
     echo json_encode($res);
 }
 
 function getPressureInfo(){
-	// percentage = (pressione - 800) * 1 / 7
+    global $id_stazione;
+    // percentage = (pressione - 800) * 1 / 7
     $res = array(
         'pressure' => 0,
         'percentage' => 0.0
@@ -278,10 +304,8 @@ function getPressureInfo(){
         die("SQL CONNECTION FAILED: " . mysqli_connect_error());
     }
         //get pressione
-    $query = "SELECT * FROM pressione 
-                    WHERE DATE(DATE_ADD(NOW(), INTERVAL 2 HOUR)) = DATE(data) 
-                    AND id_stazione = 1 
-                    ORDER BY data DESC LIMIT 1";
+    $query = "SELECT * FROM pressione WHERE DATE(DATE_ADD(NOW(), INTERVAL 2 HOUR)) = DATE(data) 
+                    AND id_stazione = " . $id_stazione . " ORDER BY data DESC LIMIT 1";
     if ($result = $mysqli->query($query)) {
         if ($row = $result->fetch_array(MYSQLI_ASSOC)){
                 $res['pressure'] = $row['valore']/100; //Pa --> hPa
@@ -293,4 +317,24 @@ function getPressureInfo(){
     echo json_encode($res);
 }
 
+function getLightInfo(){
+    global $id_stazione;
+    $res = -1;
+    
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
+    if (!$mysqli) {
+        die("SQL CONNECTION FAILED: " . mysqli_connect_error());
+    }
+    //get luce
+    $query = "SELECT * FROM luce WHERE DATE(DATE_ADD(NOW(), INTERVAL 2 HOUR)) = DATE(data) 
+                    AND id_stazione = " . $id_stazione . " ORDER BY data DESC LIMIT 1";
+    if ($result = $mysqli->query($query)) {
+        if ($row = $result->fetch_array(MYSQLI_ASSOC)){
+                $res = $row['valore'];
+        }
+        $result->free_result();
+    }
+    
+    echo json_encode($res);
+}
 ?>

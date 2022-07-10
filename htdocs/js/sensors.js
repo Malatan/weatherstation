@@ -5,14 +5,24 @@ function setWarningVisible(visible) {
     $('#warning-top').hide();
 }
 
+function setLoadingVisible(visible) {
+  if(visible)
+    $('#loading-top').show();
+  else
+    $('#loading-top').hide();
+}
+
+
 function updateSunInfo() {
+  setLoadingVisible(true);
   $.ajax({
     url: config.URL_SERVER + config.QUERY_FILE,
     type: "get",
     data: {
       a : 'getSunInfo',
       latitude : 43.7792,
-      longitude : 11.2462
+      longitude : 11.2462,
+      id : id_stazione
     },
     success: function(response) {
       $('#today-sunrise').text(response.sunrise);
@@ -20,16 +30,21 @@ function updateSunInfo() {
     },
     error: function(xhr) {
       setWarningVisible(true);
+    },
+    complete: function(xhr, status) {
+      setLoadingVisible(false);
     }
   });
 }
 
 function updateMoonInfo() {
+  setLoadingVisible(true);
   $.ajax({
     url: config.URL_SERVER + config.QUERY_FILE,
     type: "get",
     data: {
-      a : 'getMoonInfo'
+      a : 'getMoonInfo',
+      id : id_stazione
     },
     success: function(response) {
       $('#moon-phase').text(response.phase);
@@ -53,20 +68,25 @@ function updateMoonInfo() {
     },
     error: function(xhr) {
       setWarningVisible(true);
+    },
+    complete: function(xhr, status) {
+      setLoadingVisible(false);
     }
   });
 }
 
 function updatePastInfo() {
+  setLoadingVisible(true);
   const MAX_DAYS = 3;
   $.ajax({
     url: config.URL_SERVER + config.QUERY_FILE,
     type: "get",
     data: {
-      a : 'getPastInfo'
+      a : 'getPastInfo',
+      id : id_stazione
     },
     success: function(response) {
-      for (var i = 1; i <= MAX_DAYS; i++) {
+               for (var i = 1; i <= MAX_DAYS; i++) {
         var j = i - 1;
         var img = config.URL_SERVER + config.IMGS_PATH + config.imgs[response[j].weather];
         $('#past-day-' + i + '-date').text(response[j].day);
@@ -75,42 +95,56 @@ function updatePastInfo() {
         $('#past-day-' + i + '-min').text(response[j].t_min);
         $('#past-day-' + i + '-rainfall').text(response[j].rainfall);
       }
+    
     },
     error: function(xhr) {
       setWarningVisible(true);
+    },
+    complete: function(xhr, status) {
+      setLoadingVisible(false);
     }
   });
 }
 
 function updateTemperatureInfo() {
+  setLoadingVisible(true);
   $.ajax({
     url: config.URL_SERVER + config.QUERY_FILE,
     type: "get",
     data: {
-      a : 'getTemperatureInfo'
+      a : 'getTemperatureInfo',
+      id : id_stazione
     },
     success: function(response) {
       $('#temperature-temp').text(response.temperature);
       $('#temperature-perceived').text(response.perceived);
       $('#temperature-humidity').text(response.humidity);
-      $('#temperature-trend').text(response.trend);
-      if (response.trend <= 0)
+      if (response.trend <= 0) {
+        $('#temperature-trend').text(response.trend);
         $('#temperature-trend').parent().addClass('blue');
-      else
+      }
+      else {
+        $('#temperature-trend').text("+" + response.trend);
         $('#temperature-trend').parent().removeClass('blue');
+      }
     },
     error: function(xhr) {
       setWarningVisible(true);
+    },
+    complete: function(xhr, status) {
+      setLoadingVisible(false);
     }
   });
 }
 
 function updateRainInfo() {
+  setLoadingVisible(true);
   $.ajax({
     url: config.URL_SERVER + config.QUERY_FILE,
     type: "get",
     data: {
-      a : 'getRainInfo'
+      a : 'getRainInfo',
+      id : id_stazione
     },
     success: function(response) {
       $('#rain-val').text(response.rain);
@@ -127,16 +161,21 @@ function updateRainInfo() {
     },
     error: function(xhr) {
       setWarningVisible(true);
+    },
+    complete: function(xhr, status) {
+      setLoadingVisible(false);
     }
   });
 }
 
 function updatePressureInfo() {
+  setLoadingVisible(true);
   $.ajax({
     url: config.URL_SERVER + config.QUERY_FILE,
     type: "get",
     data: {
-      a : 'getPressureInfo'
+      a : 'getPressureInfo',
+      id : id_stazione
     },
     success: function(response) {
       $('#pressure-val').text(response.pressure);
@@ -148,6 +187,37 @@ function updatePressureInfo() {
     },
     error: function(xhr) {
       setWarningVisible(true);
+    },
+    complete: function(xhr, status) {
+      setLoadingVisible(false);
     }
   });
+}
+
+function updateLightLevel() {
+  setLoadingVisible(true);
+  $.ajax({
+    url: config.URL_SERVER + config.QUERY_FILE,
+    type: "get",
+    data: {
+      a : 'getLightInfo',
+      id : id_stazione
+    },
+    success: function(response) {
+      if (response == -1){
+              $('#light-level-img').attr('src', config.URL_SERVER + config.IMGS_PATH + config.imgs['nodata']);
+      } else if (response < 500){
+              $('#light-level-img').attr('src', config.URL_SERVER + config.IMGS_PATH + config.imgs['moon']);
+      } else {
+              $('#light-level-img').attr('src', config.URL_SERVER + config.IMGS_PATH + config.imgs['sun']);
+      }
+    },
+    error: function(xhr) {
+      setWarningVisible(true);
+    },
+    complete: function(xhr, status) {
+      setLoadingVisible(false);
+    }
+  });
+
 }

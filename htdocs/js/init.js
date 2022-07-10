@@ -1,9 +1,13 @@
 $(document).ready(function() {
-
+        
   updateTimeLabel();
   setInterval(updateTimeLabel, config.timers.updateTime);
-
+  
+  updateLightLevel();
+  setInterval(updateLightLevel, config.timers.lightLevel);
+  
   // menu.js
+  initStazione();
   bindToggleMenu();
 
   // clock.js

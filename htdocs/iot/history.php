@@ -3,7 +3,8 @@
 
 	require_once("secret.php");
 
-  if (isset($_GET['a'])) {
+	$ws_id = NULL;
+  if (isset($_GET['a']) && isset($_GET['id'])) {
 		$action = $_GET['a'];
     http_response_code(200);
 
@@ -12,80 +13,60 @@
 		else
 			http_response_code(400);
 
-  } else
+  } else {
   	http_response_code(400);
-
+		exit();
+	}
 // FUNCTIONS
 
 function getTemperatureHistory() {
-  $r = array(
-    array(
-      'date' => '2016-12-25',
-      'temperature' => 20,
-      'humidity' => 54
-    ),
-    array(
-      'date' => '2016-12-26',
-      'temperature' => 10,
-      'humidity' => 57
-    ),
-    array(
-      'date' => '2016-12-27',
-      'temperature' => 20,
-      'humidity' => 59
-    ),
-    array(
-      'date' => '2016-12-28',
-      'temperature' => 10,
-      'humidity' => 44
-    )
-  );
+	$ws_id = $_GET['id'];
+  $query = "SELECT DATE(t.data) AS 'date', ROUND(AVG(t.valore),1) AS 'temperature', ROUND(AVG(u.valore),1) AS 'humidity'
+		FROM temperatura t, umidita u
+		WHERE t.data = u.data AND t.id_stazione = {$ws_id} AND u.id_stazione = {$ws_id}
+		GROUP BY DATE(t.data), DATE(u.data)
+		LIMIT 10";
 
-  echo json_encode($r);
+	$r = execQuery($query);
+	echo json_encode($r);
 }
 
 function getRainHistory() {
-  $r = array(
-    array(
-      'date' => '2016-12-28',
-      'rain' => 10
-    ),
-    array(
-      'date' => '2016-12-29',
-      'rain' => 20
-    ),
-    array(
-      'date' => '2016-12-30',
-      'rain' => 15
-    ),
-    array(
-      'date' => '2016-12-31',
-      'rain' => 11
-    )
-  );
+	$ws_id = $_GET['id'];
+  $query = "SELECT DATE(data) AS 'date', ROUND((((4095 - AVG(valore)) / 4095) * 100),0) AS 'rain'
+			FROM pioggia
+			WHERE id_stazione = {$ws_id}
+			GROUP BY DATE(data)
+			LIMIT 10";
 
-  echo json_encode($r);
+	$r = execQuery($query);
+	echo json_encode($r);
 }
 
 function getPressureHistory() {
-  $r = array(
-    array(
-      'date' => '2016-12-28',
-      'pressure' => 999
-    ),
-    array(
-      'date' => '2016-12-29',
-      'pressure' => 1002
-    ),
-    array(
-      'date' => '2016-12-30',
-      'pressure' => 1000
-    ),
-    array(
-      'date' => '2016-12-31',
-      'pressure' => 1010
-    )
-  );
+	$ws_id = $_GET['id'];
+  $query = "SELECT DATE(data) AS 'date', ROUND((AVG(valore)/100),0) AS 'pressure'
+			FROM pressione
+			WHERE id_stazione = {$ws_id}
+			GROUP BY DATE(data)
+			LIMIT 10";
 
-  echo json_encode($r);
+	$r = execQuery($query);
+	echo json_encode($r);
+}
+
+function execQuery($query) {
+	$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
+	if (!$mysqli)
+			exit("SQL CONNECTION FAILED: " . mysqli_connect_error());
+
+	$r = array();
+	if ($result = $mysqli->query($query)) {
+		while ($row = $result->fetch_array(MYSQLI_ASSOC)){
+			array_push($r, $row);
+		}
+		$result->free_result();
+	}
+
+	return $r;
 }

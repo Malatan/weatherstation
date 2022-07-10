@@ -1,5 +1,5 @@
 const config = {
-  URL_SERVER : 'http://localhost/',
+  URL_SERVER : 'http://weatherstationppm.atwebpages.com/',
   QUERY_FILE : 'iot/query.php',
   HISTORY_FILE : 'iot/history.php',
   IMGS_PATH : 'img/',
@@ -7,11 +7,12 @@ const config = {
   timers : {
     clock : 1000,
     updateTime : 60000,
-    sunInfo : 3600000,
-    pastInfo : 3600000,
+    lightLevel : 60000,
     temperatureInfo : 60000,
     rainInfo : 60000,
     pressureInfo : 60000,
+    sunInfo : 3600000,
+    pastInfo : 3600000,
     moonInfo : 3600000
   },
 
