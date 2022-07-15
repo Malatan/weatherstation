@@ -74,12 +74,3 @@ CREATE VIEW pioggia_annuale_2 AS
 INSERT INTO stazione (id, descrizione)
 VALUES(1, "Zheng"), 
 (2, "Sassoli");
-
-DELIMITER $$
-CREATE TRIGGER ritira_domanda 
-AFTER DELETE ON domandatesi FOR EACH ROW
-BEGIN
-	DELETE FROM appello_membro WHERE appello_membro.matricola = old.matricola OR appello_membro.matricola = old.relatore;
-END;
-$$
-DELIMITER ;
